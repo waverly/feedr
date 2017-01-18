@@ -17,23 +17,26 @@ $(document).ready(function(){
     }
 
     var articlePopUp = function(){$('article').on("click", function(){
-      console.log('article was clicked it is quarter to fucking foru');
       $(popUp).removeClass("loader hidden");
       var thisTitle = $(this).find('h3').html();
       popUpTitle.html(thisTitle);
       var thisHref = $(this).attr('data-url');
+
       $('#linkOut').attr('href', thisHref);
+
       var thisContent = $(this).attr('data-content');
-      if (currentNews.innerText === "Reddit"){
-        $(popUpDescription).css("display", "none");
-      }
-      else if (currentNews.innerText === "Mashable"){
-        popUpDescription.html(thisContent);
-      }
-      else if (currentNews.innerText === "Digg"){
-        popUpDescription.html(thisContent);
-      }
+        if (currentNews.innerText === "Reddit"){
+          $(popUpDescription).css("display", "none");
+        }
+        else if (currentNews.innerText === "Mashable"){
+          popUpDescription.html(thisContent);
+        }
+        else if (currentNews.innerText === "Digg"){
+          popUpDescription.html(thisContent);
+        }
       });
+      docHeight = $('body').height();
+      $("#popUp").css('height', docHeight);
     }
 
     // pass Handlebars element
@@ -84,16 +87,13 @@ $(document).ready(function(){
         };
 
         // Compile Handlebars
-
         var compiledTemplate = template(articleData);
         $('#main').append(compiledTemplate);
-          currentArticle = $('article')[i];
-          console.log(currentArticle);
+        currentArticle = $('article')[i];
         $(currentArticle).attr('data-url', urlTest);
-
       }
-    currentNews.innerText = "Reddit";
-    articlePopUp();
+      currentNews.innerText = "Reddit";
+      articlePopUp();
     }).fail(function() {
         alert('Data could not be loaded'); // or whatever
     });
@@ -104,9 +104,7 @@ $(document).ready(function(){
     $("#outletNav #source1, header h1").on("click", function(){
         $("#popUp").toggleClass("hidden");
         $('#main').empty();
-        console.log('reddit was clicked');
         $.get("https://www.reddit.com/top.json", function(results){
-          console.log(results);
           var items = results.data.children;
           for (i=0; i<items.length; i++){
             // determine root of the data
@@ -148,7 +146,6 @@ $(document).ready(function(){
             var compiledTemplate = template(articleData);
             $('#main').append(compiledTemplate);
             currentArticle = $('article')[i];
-            console.log(currentArticle);
             $(currentArticle).attr('data-url', url);
           }
           currentNews.innerText = "Reddit";
@@ -169,7 +166,6 @@ $(document).ready(function(){
         for (i=0; i<item.length; i++){
 
           var root = results.hot[i];
-          console.log(root);
           var img = root.image;
           var rank = root.shares.total;
           var title = root.display_title;
@@ -184,14 +180,12 @@ $(document).ready(function(){
               impressions: rank
           };
 
-          console.log(url);
           var compiledTemplate = template(articleData);
           $('#main').append(compiledTemplate);
           currentArticle = $('article')[i];
 
           $(currentArticle).attr('data-url', url);
           $(currentArticle).attr('data-content', fullArticle);
-          console.log(currentArticle);
         }
 
         $("#popUp").toggleClass("hidden");
@@ -208,7 +202,6 @@ $(document).ready(function(){
         $("#popUp").toggleClass("hidden");
         $('#main').empty();
         $.get("https://accesscontrolalloworiginall.herokuapp.com/http://digg.com/api/news/popular.json", function(results){
-          console.log(results);
           item = results.data.feed;
           for (i=0; i<item.length; i++){
 
@@ -279,24 +272,5 @@ $(document).ready(function(){
           $(this).toggleClass('active');
         }
       };
-
-      $('article .article').on("click", function(){
-        console.log('article was clicked it is quarter to fucking foru');
-        // $(popUp).removeClass("loader hidden");
-        // var thisTitle = $(this).find('h3').html();
-        // popUpTitle.html(thisTitle);
-        // var thisHref = $(this).attr('data-url');
-        // $('#linkOut').attr('href', thisHref);
-        // var thisContent = $(this).attr('data-content');
-        // if (currentNews.innerText === "Reddit"){
-        //   $(popUpDescription).css("display", "none");
-        // }
-        // else if (currentNews.innerText === "Mashable"){
-        //   popUpDescription.html(thisContent);
-        // }
-        // else if (currentNews.innerText === "Digg"){
-        //   popUpDescription.html(thisContent);
-        // }
-      });
 
 });
